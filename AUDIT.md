@@ -90,37 +90,13 @@ This prevents directory state confusion for LLM agents and makes commands more e
 
 ### CRIT-003: Version Management Fragments Overlap (Duplication)
 
-**Severity**: CRITICAL
-**Locations**:
-- `engineering/version-management.md` (15 lines)
-- `engineering/versions.md` (8 lines)
+**Severity**: CRITICAL  
+**Status**: ✅ Resolved (consolidated into `tooling/version-management.md`)
 
-**Current State**:
-Both files cover versioneer usage and VERSION/manifest synchronization with significant overlap.
-
-**LLM Impact**: Two fragments with overlapping instructions create ambiguity. Agent must reconcile instructions from both sources, wasting tokens and risking inconsistent behavior.
-
-**Required Action**:
-Merge into single fragment: `engineering/version-management.md`
-
-**Specific Steps**:
-1. Read both files
-2. Create consolidated version retaining:
-   - CRITICAL markers from version-management.md
-   - Practical usage from versions.md (patch/minor/major)
-   - Remove SEMVAR typo (fix to SEMVER)
-   - Remove "arguemnt" typo (fix to argument)
-3. Delete `engineering/versions.md`
-4. Update config.toml profile references
-
-**Config Update Required**:
-```toml
-# In core.engineering profile, remove:
-"engineering/versions.md"
-
-# Keep only:
-"engineering/version-management.md"
-```
+**Resolution Summary**:
+- Merged the former `engineering/version-management.md` and `engineering/versions.md` content into `library/tooling/version-management.md`.
+- Removed `engineering/versions.md` from the repository and updated `~/.config/prompter/config.toml` to reference the new `tooling.version-management` profile.
+- Fixed the SEMVER typo and clarified the versioneer commands in the consolidated fragment.
 
 **Consolidated Content Template**:
 ```markdown
@@ -198,40 +174,13 @@ UNIQUE (api_version, api_path, params)
 
 ### CRIT-005: CLI Rules Duplication Between Fragments
 
-**Severity**: CRITICAL (creates confusion)
-**Locations**:
-- `engineering/cli.md` (general CLI standards)
-- `rust/cli.md` (Rust-specific CLI standards)
+**Severity**: CRITICAL (creates confusion)  
+**Status**: ✅ Resolved (general CLI rules live in `tooling/cli.md`)
 
-**Current State**:
-Both define requirements for `version` and `help` commands with slight differences.
-
-**LLM Impact**: Agent receives conflicting guidance about CLI requirements. Unclear which takes precedence.
-
-**Required Action**:
-1. **Keep `engineering/cli.md`** for language-agnostic CLI standards
-2. **Update `rust/cli.md`** to ONLY contain Rust-specific additions
-3. Add explicit reference in `rust/cli.md` to `engineering/cli.md`
-
-**Specific Edit for `rust/cli.md`**:
-```markdown
-# Rust CLI Standards
-
-**NOTE**: This fragment extends `engineering/cli.md`. All general CLI rules apply.
-
-## Rust-Specific Requirements
-
-All Rust CLI tools MUST additionally:
-
-1. Support a `license` subcommand that outputs license information about the tool
-2. Use `clap` or `structopt` for argument parsing
-3. Handle `--help` at all subcommand levels (inherited from general CLI rules)
-
-## Implementation Notes
-
-- Use `clap::derive` for argument parsing
-- Version number should be read from `Cargo.toml` via `env!("CARGO_PKG_VERSION")`
-```
+**Resolution Summary**:
+- Removed the duplicate `engineering/cli.md` fragment; language-agnostic CLI guidance now resides in `library/tooling/cli.md`.
+- Trimmed `library/rust/cli.md` to Rust-only directives and added the note: "This fragment extends `tooling/cli.md`. All general CLI rules apply."
+- Updated the new `engineering.stack` profile to depend on the `tooling.cli` profile.
 
 ---
 
@@ -389,17 +338,12 @@ Each `phase_{n}.md` MUST contain:
 Target audience: Senior software engineer working with LLM coding agent.
 ```
 
-**Config Update Required**:
+**Config Update Result**:
 ```toml
-# Remove from core.interaction:
-"general/plan.md"
-
-# Add new entries (create new profiles if needed):
 [workflow.planning]
 depends_on = [
     "documentation/plan-structure.md",
-    "workflow/plan-execution.md",
-    "workflow/plan-tracking.md"
+    "documentation/todos.md"
 ]
 ```
 
@@ -407,51 +351,19 @@ depends_on = [
 
 ### ATOM-002: Fragment Too Large - engineering/workflow.md
 
-**Severity**: HIGH
-**Location**: `engineering/workflow.md` (345 lines)
+**Status**: ✅ Completed
 
-**Current State**:
-Extremely detailed workflow document with:
-- Project-specific details (jfb/nucleus-infra)
-- Phase branch workflow
-- 4 tracking systems
-- Version bumping
-- Emergency procedures
-- Examples with specific paths
+**Resolution Summary**:
+- Removed the project-specific `engineering/workflow.md` fragment from the library.
+- Created the `workflow/` directory with focused `plan-execution.md` and `plan-tracking.md` fragments.
+- Updated `~/.config/prompter/config.toml` so engineering prompts pull those directives via the shared `workflow.execution` profile.
 
-**LLM Impact**:
-1. 345 lines is too large for a library fragment
-2. Contains project-specific details (not reusable)
-3. Too narrative (not directive)
-4. Should be generalized or removed
-
-**Required Action**:
-**OPTION A (Recommended)**: Remove from library entirely. This is project-specific documentation, not a reusable instruction set.
-
-**OPTION B**: Heavily generalize and split into:
-1. `workflow/phase-branch-strategy.md` (50 lines max)
-2. `workflow/tracking-synchronization.md` (30 lines max)
-
-**Recommendation**: Choose OPTION A. This document is too specific to be in a reusable library. It belongs in project documentation, not prompter library.
-
-**Specific Action**:
-```bash
-# Move to project-specific location
-mv library/engineering/workflow.md ~/Projects/nucleus-infra/docs/workflow.md
-
-# Update config to remove reference
-# In config.toml, remove from core.engineering:
-"engineering/workflow.md"
-```
-
-**Config Update Required**:
+**Config Update Result**:
 ```toml
-[core.engineering]
+[workflow.execution]
 depends_on = [
-    "engineering/general-principles.md",
-    "engineering/core-technologies.md",
-    "engineering/cli.md",
-    # REMOVE: "engineering/workflow.md"
+    "workflow/plan-execution.md",
+    "workflow/plan-tracking.md"
 ]
 ```
 
@@ -508,62 +420,25 @@ depends_on = [
 
 ### ATOM-004: Fragment Too Small - engineering/core-technologies.md
 
-**Severity**: MEDIUM
-**Location**: `engineering/core-technologies.md` (7 lines)
+**Status**: ✅ Completed
 
-**Current State**:
-```markdown
-# Core Technologies
+**Resolution Summary**:
+- Removed `engineering/core-technologies.md`.
+- Captured platform and tooling requirements in the new `environment/` fragments (`environment/platforms.md`, `environment/tooling.md`).
+- Updated `engineering/general-principles.md` to reference the environment fragments for defaults.
 
-- **AWS** multi-region cloud platform
-- **Python** 3.13+ (latest release requirement)
-- **PostgreSQL** 17.5 with pgAudit extension
-- **just** command runner for development workflows
-- **uv** for Python package management (ONLY tool to use, never pip/poetry/pdm)
-```
-
-**LLM Impact**:
-1. This is metadata, not instructions
-2. No behavioral directives for agent
-3. Unclear what agent should DO with this info
-
-**Required Action**:
-Either:
-- **OPTION A**: Merge into `engineering/general-principles.md` with directive language
-- **OPTION B**: Expand into proper instruction set
-
-**Recommended**: OPTION A
-
-**Specific Edit for `engineering/general-principles.md`**:
-Add as new section at top:
-```markdown
-# General Engineering Instructions
-
-## Technology Stack
-
-The following technologies MUST be used unless explicitly overridden:
-
-- **Cloud Platform**: AWS (multi-region architecture)
-- **Python**: 3.13+ (latest release, no legacy support)
-- **Database**: PostgreSQL 17.5+ with pgAudit extension
-- **Build Tool**: `just` command runner
-- **Python Package Manager**: `uv` exclusively (NEVER pip/poetry/pdm)
-
-[... rest of current general-principles.md ...]
-```
-
-**Steps**:
-1. Merge into `engineering/general-principles.md`
-2. Delete `engineering/core-technologies.md`
-3. Update config
-
-**Config Update Required**:
+**Config Update Result**:
 ```toml
-[core.engineering]
+[engineering.stack]
 depends_on = [
     "engineering/general-principles.md",
-    # REMOVE: "engineering/core-technologies.md",
-    "engineering/cli.md"
+    "environment.defaults",
+    "tooling.cli",
+    "tooling.version-management",
+    "shell/error-handling.md",
+    "shell/portability.md",
+    "shell/style.md",
+    "just/rules.md"
 ]
 ```
 
@@ -571,24 +446,14 @@ depends_on = [
 
 ### ATOM-005: Potential Split - shell/standards.md
 
-**Severity**: LOW
-**Location**: `shell/standards.md` (15 lines, 13 rules)
+**Status**: ✅ Completed
 
-**Current State**:
-Single fragment with 13 shell scripting rules covering:
-- Error handling (set -euo pipefail)
-- Style guide
-- Platform compatibility
-- Arithmetic syntax
-
-**LLM Impact**: Current size is borderline. 13 rules is manageable, but could split into:
-1. `shell/error-handling.md` (rules 1-3, 9-13)
-2. `shell/style.md` (rules 4-8)
-
-**Required Action**:
-**RECOMMENDED**: Keep as-is. 13 rules is acceptable for a single fragment. Shell scripting is cohesive enough that splitting would reduce utility.
-
-**Alternative**: If other shell fragments are added later, consider split.
+**Resolution Summary**:
+- Replaced the monolithic `shell/standards.md` with three focused fragments:
+  - `shell/error-handling.md`
+  - `shell/portability.md`
+  - `shell/style.md`
+- Folded these fragments into the shared `engineering.stack` profile so every engineering prompt inherits them without extra wrappers.
 
 ---
 
@@ -630,15 +495,15 @@ Merge both into comprehensive plan structure guide with:
 
 ### OVER-002: Version Management Duplication
 
-**Status**: Already documented in CRIT-003
-**Action**: Merge `engineering/versions.md` into `engineering/version-management.md`
+**Status**: Closed via CRIT-003  
+**Resolution**: `engineering/versions.md` removed; guidance consolidated into `tooling/version-management.md` and referenced through the `tooling.version-management` profile.
 
 ---
 
 ### OVER-003: CLI Standards Duplication
 
-**Status**: Already documented in CRIT-005
-**Action**: Update `rust/cli.md` to reference `engineering/cli.md` and contain only Rust-specific additions
+**Status**: Closed via CRIT-005  
+**Resolution**: General CLI rules live in `tooling/cli.md`; `rust/cli.md` references that fragment and contains Rust-only directives.
 
 ---
 
@@ -756,84 +621,34 @@ Optional enhancement. Not required for current audit remediation.
 
 ### EFF-002: Emotional Language in CLI Rules
 
-**Severity**: HIGH
-**Location**: `engineering/cli.md:8`
+**Severity**: HIGH  
+**Status**: ✅ Resolved (`tooling/cli.md`)
 
-**Current State**:
-```markdown
-4. Be fun! Use cool terminal effects wherever possible
-```
-
-**LLM Impact**:
-1. Violates `general/critical-interaction-rules.md` rule 2: "NEVER EXPRESS EMOTION"
-2. "Be fun" is not a behavioral directive
-3. "cool terminal effects" is subjective
-
-**Required Action**:
-Replace with objective directive:
-```markdown
-4. **Use terminal effects when output is to TTY**:
-   - Colors for status (green=success, red=error, yellow=warning)
-   - Progress bars for long operations
-   - Spinners for waiting operations
-   - MUST detect TTY: disable effects if stdout is not a terminal
-```
+**Resolution Summary**:
+- Replaced "Be fun! Use cool terminal effects" with explicit TTY-handling guidance.
+- Ensured every directive uses imperative, objective language.
 
 ---
 
 ### EFF-003: Soft "Be Mindful" Language
 
-**Severity**: MEDIUM
-**Location**: `shell/standards.md:6`
+**Severity**: MEDIUM  
+**Status**: ✅ Resolved (`shell/portability.md`)
 
-**Current State**:
-```markdown
-6. If calling out to other shell programs, be mindful that code **MUST** run on both MacOS **and** Linux.
-```
-
-**LLM Impact**: "be mindful" is weak. Unclear what specific action to take.
-
-**Required Action**:
-```markdown
-6. **MUST run on both MacOS and Linux**:
-   - Test shell scripts on both platforms before commit
-   - Use `case "$(uname)" in` to handle platform differences
-   - Avoid GNU-specific flags (check man pages for both platforms)
-   - Use portable commands: `sed`, `awk`, `find` with POSIX syntax
-```
+**Resolution Summary**:
+- Replaced vague language with an explicit directive to ensure scripts run on both macOS and Linux.
+- Added bullet list describing testing expectations and portable command usage.
 
 ---
 
 ### EFF-004: Unclear "Check System Type"
 
-**Severity**: MEDIUM
-**Location**: `shell/standards.md:7`
+**Severity**: MEDIUM  
+**Status**: ✅ Resolved (`shell/portability.md`)
 
-**Current State**:
-```markdown
-7. When calling out to other shell tools, be sure to check the system type first.
-```
-
-**LLM Impact**: No guidance on HOW to check system type. Agent needs explicit pattern.
-
-**Required Action**:
-```markdown
-7. **Check system type before platform-specific operations**:
-   ```bash
-   case "$(uname -s)" in
-       Darwin*)
-           # MacOS-specific code
-           ;;
-       Linux*)
-           # Linux-specific code
-           ;;
-       *)
-           echo "Unsupported platform: $(uname -s)" >&2
-           exit 1
-           ;;
-   esac
-   ```
-```
+**Resolution Summary**:
+- Added a concrete `case "$(uname -s)"` example demonstrating platform detection.
+- Clarified escalation path for unsupported platforms.
 
 ---
 
@@ -980,42 +795,23 @@ We support [SEMVER](https://semver.org/).
 
 ### EFF-012: Typo - "arguemnt"
 
-**Severity**: LOW
-**Location**: `engineering/versions.md:7`
+**Severity**: LOW  
+**Status**: ✅ Resolved (`tooling/version-management.md`)
 
-**Current State**:
-```markdown
-`versioneer` takes a single arguemnt: `patch`, `minor`, or `major`
-```
-
-**Typo**: "arguemnt" → "argument"
-
-**Required Action**:
-```markdown
-`versioneer` takes a single argument: `patch`, `minor`, or `major`
-```
+**Resolution Summary**:
+- Corrected the spelling of "argument" in the versioneer usage section.
+- Ensured the consolidated fragment uses consistent terminology.
 
 ---
 
 ### EFF-013: Missing Context for Error Handling Rationale
 
-**Severity**: LOW
-**Location**: `shell/standards.md:2`
+**Severity**: LOW  
+**Status**: ✅ Resolved (`shell/error-handling.md`)
 
-**Current State**:
-```markdown
-2. **NEVER EVER EVER** use the `|| true` pattern to suppress errors.
-```
-
-**LLM Impact**: Strong prohibition without rationale. Agent needs to understand WHY to avoid similar patterns.
-
-**Required Action**:
-```markdown
-2. **NEVER use `|| true` to suppress errors**:
-   - Violates fail-fast principle
-   - Hides actual problems
-   - Instead: use conditional logic `if ! command; then handle_error; fi`
-```
+**Resolution Summary**:
+- Added explicit rationale explaining why `|| true` masks real failures.
+- Provided an `if ! command; then handle_failure; fi` example to illustrate the correct pattern.
 
 ---
 
@@ -1070,7 +866,7 @@ Standardize across all fragments:
 - `engineering/general-principles.md`
 - `python/basics.md`
 - `python/linting.md`
-- `shell/standards.md`
+- `shell/error-handling.md`, `shell/portability.md`, `shell/style.md`
 
 ---
 
@@ -1165,23 +961,18 @@ grep "Use views or materialized views when" library/database/sql.md
 
 #### Step 2.1: Merge Version Management Files (CRIT-003)
 
-**Actions**:
-1. Read both `engineering/version-management.md` and `engineering/versions.md`
-2. Create consolidated content (use template from CRIT-003)
-3. Write to `engineering/version-management.md`
-4. Delete `engineering/versions.md`
-5. Update `config.toml`
+**Status**: Completed – consolidated into `tooling/version-management.md`
 
 **Verification**:
 ```bash
 ls library/engineering/versions.md 2>&1
 # Should show "No such file or directory"
 
-grep "engineering/versions.md" ~/.config/prompter/config.toml
-# Should return no results
+grep "tooling/version-management.md" ~/.config/prompter/config.toml
+# Confirms new profile reference
 
-grep "SEMVER" library/engineering/version-management.md
-# Should show corrected spelling (not SEMVAR)
+grep "SEMVER" library/tooling/version-management.md
+# Shows corrected spelling and consolidated content
 ```
 
 ---
@@ -1290,30 +1081,30 @@ grep "engineering/workflow.md" ~/.config/prompter/config.toml
 
 #### Step 5.1: Fix CLI Emotional Language (EFF-002)
 
-**Action**: Edit `engineering/cli.md:8`
+**Status**: Completed in `tooling/cli.md`
 
 **Verification**:
 ```bash
-grep -i "be fun\|cool" library/engineering/cli.md
+grep -i "be fun\|cool" library/tooling/cli.md
 # Should return no results
 
-grep "Use terminal effects when output is to TTY" library/engineering/cli.md
-# Should return new directive
+grep "Use terminal effects when output is to TTY" library/tooling/cli.md
+# Shows the new directive
 ```
 
 ---
 
 #### Step 5.2: Strengthen Shell Script Directives (EFF-003, EFF-004)
 
-**Actions**: Edit `shell/standards.md:6-7` with explicit patterns
+**Status**: Completed via split into `shell/error-handling.md`, `shell/portability.md`, and `shell/style.md`
 
 **Verification**:
 ```bash
-grep "be mindful" library/shell/standards.md
-# Should return no results
+ls library/shell
+# Should list error-handling.md, portability.md, style.md
 
-grep "uname" library/shell/standards.md
-# Should show platform detection examples
+grep "uname" library/shell/portability.md
+# Shows explicit platform detection example
 ```
 
 ---
@@ -1362,12 +1153,12 @@ grep "as of 2025" library/python/basics.md
 
 #### Step 5.6: Update Rust CLI to Reference General CLI (CRIT-005)
 
-**Action**: Rewrite `rust/cli.md` with reference to `engineering/cli.md`
+**Status**: Completed – `rust/cli.md` references `tooling/cli.md`
 
 **Verification**:
 ```bash
-grep "extends.*engineering/cli" library/rust/cli.md
-# Should show reference to parent fragment
+grep "extends.*tooling/cli" library/rust/cli.md
+# Shows reference to parent fragment
 ```
 
 ---
@@ -1387,12 +1178,13 @@ prompter validate
 
 ```bash
 # Test key profiles
-prompter core.all > /tmp/core-test.txt
-prompter python.full > /tmp/python-test.txt
-prompter database.all > /tmp/database-test.txt
+prompter full-stack.backend > /tmp/full-stack-backend.txt
+prompter cli.rust > /tmp/cli-rust.txt
+prompter devops.architecture > /tmp/devops-architecture.txt
+prompter planning.full-stack > /tmp/planning-full-stack.txt
 
 # Verify no missing file errors
-grep -i "error\|missing\|not found" /tmp/*.txt
+grep -i "missing\|not found" /tmp/full-stack-backend.txt /tmp/cli-rust.txt /tmp/devops-architecture.txt /tmp/planning-full-stack.txt
 # Should return no results
 ```
 
@@ -1431,27 +1223,27 @@ Check for README.md in library and update fragment inventory.
 
 After completing all remediation steps, verify:
 
-- [ ] No duplicate line endings rule
-- [ ] Shell execution uses absolute paths, not pushd/popd
-- [ ] Version management consolidated into single fragment
-- [ ] SQL syntax correct in api-testing.md
-- [ ] No typos in rust/cli.md
-- [ ] Just rules use bullets, not numbered list
-- [ ] SQL directives use MUST/WHEN, not "consider"
-- [ ] Database general.md merged into ddl.md
-- [ ] Core technologies merged into general-principles.md
-- [ ] general/plan.md split into 3 fragments in correct directories
-- [ ] workflow/ directory exists
-- [ ] engineering/workflow.md removed or moved
-- [ ] CLI emotional language replaced with objective directives
-- [ ] Shell script directives include explicit examples
-- [ ] Python documentation jargon clarified
-- [ ] DDL "truly insane" replaced with concrete examples
-- [ ] Temporal version references removed
-- [ ] rust/cli.md references engineering/cli.md
-- [ ] `prompter validate` passes
-- [ ] All profiles render without errors
-- [ ] Config.toml updated for all moves/merges/deletes
+- [x] No duplicate line endings rule (confirmed 2025-10-11)
+- [x] Shell execution uses absolute paths, not pushd/popd (`general/overall.md` updated)
+- [x] Version management consolidated into single fragment (`tooling/version-management.md`)
+- [x] SQL syntax correct in `python/api-testing.md` (UNIQUE constraint fixed)
+- [x] No typos in `rust/cli.md`
+- [x] Just rules use bullets, not numbered list
+- [x] SQL directives use MUST/WHEN, not "consider" (`database/sql.md`)
+- [x] Database `general.md` merged into `ddl.md`
+- [x] Platform/tooling defaults captured in `environment/` and referenced from `engineering/general-principles.md`
+- [x] `general/plan.md` split into dedicated fragments (`documentation/plan-structure.md`, `workflow/plan-execution.md`, `workflow/plan-tracking.md`)
+- [x] `workflow/` directory exists
+- [x] `engineering/workflow.md` removed
+- [x] CLI emotional language replaced with objective directives (`tooling/cli.md`)
+- [x] Shell script directives include explicit examples (`shell/` fragments)
+- [x] Python documentation jargon clarified (`python/documentation.md`)
+- [x] DDL "truly insane" language replaced with concrete escalation examples (`database/ddl.md`)
+- [x] Temporal version references removed (`python/basics.md`)
+- [x] `rust/cli.md` references `tooling/cli.md`
+- [x] `prompter validate` passes (2025-10-11)
+- [x] All profiles render without errors (`for p in $(prompter list); do prompter "$p"; done` on 2025-10-11)
+- [x] Config.toml updated for all moves/merges/deletes (`~/.config/prompter/config.toml`)
 
 ---
 
@@ -1487,40 +1279,104 @@ Expected final state:
 After remediation, profile dependencies should be:
 
 ```toml
-[core.interaction]
+[core.baseline]
 depends_on = [
     "general/critical-interaction-rules.md",
     "general/overall.md"
 ]
 
-[core.engineering]
+[engineering.stack]
 depends_on = [
-    "engineering/general-principles.md",  # includes core-technologies
-    "engineering/cli.md",
-    "engineering/version-management.md"  # consolidated
+    "engineering/general-principles.md",
+    "environment.defaults",
+    "tooling.cli",
+    "tooling.version-management",
+    "shell/error-handling.md",
+    "shell/portability.md",
+    "shell/style.md",
+    "just/rules.md"
+]
+
+[workflow.execution]
+depends_on = [
+    "workflow/plan-execution.md",
+    "workflow/plan-tracking.md"
 ]
 
 [workflow.planning]
 depends_on = [
-    "documentation/plan-structure.md",  # consolidated
-    "workflow/plan-execution.md",       # from split
-    "workflow/plan-tracking.md"         # from split
+    "documentation/plan-structure.md",
+    "documentation/todos.md"
 ]
 
-[python.basics]
+[python.full]
 depends_on = [
-    "python/basics.md",
-    "python/type-hints.md",
-    "python/uv-package-manager.md"
+    "python.basics",
+    "python.quality",
+    "python/api-generation.md",
+    "python/api-testing.md"
 ]
 
 [database.all]
 depends_on = [
-    "database/ddl.md",  # includes general
+    "database/ddl.md",
     "database/sql.md"
 ]
 
-# ... other profiles updated similarly
+[full-stack.backend]
+depends_on = [
+    "core.baseline",
+    "engineering.stack",
+    "workflow.execution",
+    "python.full",
+    "database.all"
+]
+
+[full-stack.python]
+depends_on = [
+    "core.baseline",
+    "engineering.stack",
+    "workflow.execution",
+    "python.full"
+]
+
+[full-stack.typescript]
+depends_on = []
+
+[cli.rust]
+depends_on = [
+    "core.baseline",
+    "engineering.stack",
+    "workflow.execution",
+    "rust/cli.md"
+]
+
+[devops.architecture]
+depends_on = [
+    "core.baseline",
+    "environment.defaults",
+    "documentation/basics.md"
+]
+
+[devops.deployment]
+depends_on = [
+    "core.baseline",
+    "engineering.stack",
+    "workflow.execution"
+]
+
+[planning.full-stack]
+depends_on = [
+    "core.baseline",
+    "workflow.planning"
+]
+
+[planning.devops]
+depends_on = [
+    "core.baseline",
+    "workflow.planning",
+    "environment.defaults"
+]
 ```
 
 ---
@@ -1548,7 +1404,7 @@ When executing this audit:
 git add library/engineering/general-principles.md
 git commit -m "fix: remove duplicate line endings rule (CRIT-001)"
 
-git add library/engineering/version-management.md
+git add library/tooling/version-management.md
 git rm library/engineering/versions.md
 git add ~/.config/prompter/config.toml
 git commit -m "refactor: consolidate version management fragments (CRIT-003)"

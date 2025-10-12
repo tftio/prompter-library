@@ -2,16 +2,16 @@
 
 We target **PostgreSQL (latest stable release)** for every schema. Assume access to modern Postgres features (generated columns, JSONB, partial indexes) unless the operator states otherwise.
 
-When creating DDL, hold the following:
+When creating DDL, follow these directives:
 
-1. table names are **plural** – a user is a record in the `users` table; join tables should be named with `_joins` as a suffix;
-2. when we need synthetic keys, use a `UUID` unless otherwise instructed;
-3. when using natural keys in constraints, the foreign key constraint **MUST** have `on update cascade` to maintain referential integrity
-4. feel free to use constraints, including custom functions
-5. feel free to add indices
-6. I strongly prefer not to have null values, unless otherwise explicitly instructed;
-7. You **MUST** normalize tables to at least the 3NF, unless otherwise explicitly instructed;
-8. **If any rule conflicts with requirements, ASK the operator before proceeding**. Consult them before:
-   - Denormalizing tables for performance (relaxes 3NF)
-   - Allowing NULL values in columns that drive business logic
-   - Replacing natural keys with synthetic keys when natural keys are viable
+- **MUST pluralize table names** – a single user record lives in `users`; join tables end with `_joins`.
+- **MUST default to UUID surrogate keys** unless the operator mandates another strategy.
+- **WHEN enforcing natural keys**, add `ON UPDATE CASCADE` on every foreign key that references them.
+- **MUST use constraints and custom functions** to enforce business rules in the database rather than in application code.
+- **MUST create supporting indexes** for every foreign key and for predicates that appear in WHERE or JOIN clauses.
+- **MUST avoid NULLs in business-critical columns**; request explicit approval before allowing nullable fields.
+- **MUST normalize schemas to at least 3NF** unless the operator approves a denormalized design.
+- **ASK the operator before deviating** from these rules, especially when:
+  - Denormalizing tables to meet performance targets
+  - Allowing NULL values in columns that drive business logic
+  - Replacing reliable natural keys with synthetic keys
