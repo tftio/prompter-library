@@ -1,11 +1,9 @@
 # Python Standards
 
-All projects will use the latest released version of Python (3.13.7 as of 2025-09-10). We will **not** support older versions, unless forced to by external dependencies.
+All projects **MUST** use the latest stable Python release; verify the version on python.org before creating virtual environments. Legacy versions are unsupported unless an external dependency forces an exception approved by the operator.
 
 ## Basics
 
-Python modules *must* explicitly specify what symbols they export with a `__all__ = []` block at the bottom of the file.
+Python modules **MUST** explicitly specify what symbols they export with a `__all__ = []` block at the bottom of the file.
 
-All imports *must* be at the top of the file, and must be sorted.
-
-
+All imports **MUST** be at the top of the file and sorted.

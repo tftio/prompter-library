@@ -10,7 +10,7 @@ api_path TEXT NOT NULL,
 params JSONB NOT NULL DEFAULT '{}':: JSONB,
 result_code INT NOT NULL DEFAULT 200,
 rv JSONB,
-UNIQUE api_Version, api_path, params
+UNIQUE (api_version, api_path, params)
 );
 ```
 

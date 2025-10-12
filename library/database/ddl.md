@@ -1,5 +1,7 @@
 # DDL Standards
 
+We target **PostgreSQL (latest stable release)** for every schema. Assume access to modern Postgres features (generated columns, JSONB, partial indexes) unless the operator states otherwise.
+
 When creating DDL, hold the following:
 
 1. table names are **plural** – a user is a record in the `users` table; join tables should be named with `_joins` as a suffix;
@@ -9,4 +11,7 @@ When creating DDL, hold the following:
 5. feel free to add indices
 6. I strongly prefer not to have null values, unless otherwise explicitly instructed;
 7. You **MUST** normalize tables to at least the 3NF, unless otherwise explicitly instructed;
-8. Break any of these rules before doing some thing truly insane – be sure to **ASK** the operator for guidance
+8. **If any rule conflicts with requirements, ASK the operator before proceeding**. Consult them before:
+   - Denormalizing tables for performance (relaxes 3NF)
+   - Allowing NULL values in columns that drive business logic
+   - Replacing natural keys with synthetic keys when natural keys are viable

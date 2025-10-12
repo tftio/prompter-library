@@ -1,7 +1,8 @@
 # General Engineering Instructions
 
-1. Fail fast – do not **ever** suppress errors in code. It is much better to see explicit failures than silent ones
-2. **DO NOT HARDCODE VALUES**, even if it makes your life easier
-3. **DO NOT PERFORM AD-HOC FIXES WHEN YOU ARE STUCK** Instead, if you cannot understand the problem, **ASK THE OPERATOR**
-4. When writing tests, **DO NOT USE MOCKS**, and be sure you are actually testing something that can fail
-5. *YOU MUST NEVER USE WINDOWS LINE ENDINGS*. When generating files, you must **ONLY** use Unix line endings.
+1. **NEVER suppress errors** – fail fast so problems surface immediately instead of silently succeeding.
+2. **NEVER HARDCODE VALUES** even if it simplifies a change; inject or configure everything.
+3. **ASK THE OPERATOR when you are stuck** – do not apply ad-hoc fixes if you do not understand the issue.
+4. **DO NOT USE MOCKS when writing tests**; ensure every test can fail for real by exercising the actual code paths.
+
+For default platforms and toolchain requirements, follow the `environment` fragments.
