@@ -1,12 +1,14 @@
 # THE FIRST INVARIANT
 
-*YOU MUST NEVER USE WINDOWS LINE ENDINGS*. When generating files, you must **ONLY** use Unix line endings.
+**YOU MUST NEVER USE WINDOWS LINE ENDINGS**. When generating files, you must **ONLY** use Unix line endings.
 
 
 ## SHELL EXECUTION INVARIANT
 
-When changing directories to work, you *MUST* use the following shell syntax:
+When executing commands in different directories, **NEVER** use `cd` to change directories. Instead:
 
-`(pushd {directory}; {shell work goes here}; popd)`
+1. **Use absolute paths**: `pytest /foo/bar/tests` (not `cd /foo/bar && pytest tests`)
+2. **If `cd` is unavoidable**: Use subshells `(cd /path && command)` to avoid state pollution
+3. **Maintain working directory**: Commands must not leave the shell in a different directory
 
-In other words, you should *never* end a shell command or session in a directory other than the one you were invoked in. This is a persistent source of confusion for LLM agents.
+This prevents directory state confusion for LLM agents and keeps command intent explicit.

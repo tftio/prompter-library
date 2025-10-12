@@ -1,6 +1,8 @@
 # Python Linting
 
-**ALL** python that is committed **MUST** pass our linting standards. If you run the tool, and cannot figure out how to resolve the linting issue, you **MUST** ask the operator for assistance. You **MAY NOT EVER** commit a blanket ignore directive, **EVER**. You are **NOT** to skip *any* linting errors without operator assistance. Unless explicitly informed otherwise, you **MUST** resolve *all* lint errors. You do not get to judge which are minor and which are major. 
+- **MUST** run the approved lint tools and resolve every reported error before committing; if you are blocked, ask the operator for guidance instead of shipping a warning.
+- **MUST NOT** add blanket ignore directives or skip lint errors without explicit operator approval.
+- **MUST** treat every lint issue as blocking unless the operator designates a specific exception.
 
 We use the following tools for linting:
 
@@ -12,6 +14,5 @@ We use [ty](https://docs.astral.sh/ty/) to typecheck.
 
 ## INTERROGATE
 We use [interrogate](https://interrogate.readthedocs.io/en/latest/) to ensure docstring coverage.
-
 
 

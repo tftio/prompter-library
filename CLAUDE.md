@@ -468,10 +468,18 @@ Before pushing changes:
 
 - `general/critical-interaction-rules.md` - Core behavioral constraints
 - `general/overall.md` - Overall project approach
-- `engineering/general-principles.md` - Universal engineering rules
-- `engineering/workflow.md` - Development workflow patterns
-- `documentation/plans.md` - Planning document standards
+- `engineering/general-principles.md` - Universal engineering rules (see environment for platforms/tooling)
+- `environment/platforms.md` - Default infrastructure and OS assumptions
+- `environment/tooling.md` - Required dev tooling and package management defaults
+- `tooling/cli.md` - Language-agnostic CLI standards
+- `tooling/version-management.md` - Versioneer usage and invariants
+- `documentation/plan-structure.md` - Planning document format and audience
 - `documentation/todos.md` - TODO management
+- `workflow/plan-execution.md` - Phase workflow for executing plans
+- `workflow/plan-tracking.md` - Rules for GitHub/Asana synchronization
+- `shell/error-handling.md` - Fail-fast expectations for scripts
+- `shell/portability.md` - Cross-platform requirements and platform detection
+- `shell/style.md` - Style, tooling, and arithmetic conventions for Bash
 
 ### Key Commands
 
