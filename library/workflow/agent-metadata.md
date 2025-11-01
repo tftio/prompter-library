@@ -1,12 +1,23 @@
-# Agent Metadata Configuration
+# Agent Metadata Configuration (DEPRECATED)
 
-## Discovery
+**This fragment is deprecated.** Use `workflow/work-metadata.md` instead.
 
-**Check for `.agent-metadata.toml` at invocation directory** - Before requesting project information from the operator, check if `.agent-metadata.toml` exists in the current working directory (where the agent was invoked). If found, read and parse it to obtain project configuration.
+## Migration
 
-## Required Schema
+`.agent-metadata.toml` has been renamed to `.work-metadata.toml` with an updated schema that better supports worktree-based workflows.
 
-The `.agent-metadata.toml` file must follow this structure:
+**Key changes**:
+- File name: `.agent-metadata.toml` → `.work-metadata.toml`
+- New `[work]` section for worktree-specific context (Asana task, GitHub project)
+- `tracking.github_project` (name) → `work.github_project` (URL)
+- `tracking.asana_project` (project board) → `work.asana_task` (specific task)
+- `default_tags` → `default_labels`
+
+See `workflow/work-metadata.md` for complete documentation.
+
+## Legacy Schema (for reference)
+
+The old `.agent-metadata.toml` format:
 
 ```toml
 [project]
@@ -19,8 +30,6 @@ asana_project = "https://app.asana.com/0/projectid/board"
 default_assignee = "github-username"
 default_tags = ["tag1", "tag2"]
 ```
-
-**All fields are optional** - The agent must handle missing keys gracefully through fallback behavior.
 
 ## Fallback Behavior
 
