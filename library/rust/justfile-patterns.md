@@ -1,6 +1,6 @@
 # Rust justfile Patterns
 
-**NOTE**: This fragment extends `just/rules.md`. All general justfile rules apply.
+**NOTE**: This fragment extends `prompter just.rules`. All general justfile rules apply.
 
 ## Standard Rust justfile Structure
 

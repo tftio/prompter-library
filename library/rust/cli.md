@@ -1,6 +1,6 @@
 # Rust CLI Standards
 
-**NOTE**: This fragment extends `tooling/cli.md`. All general CLI rules apply.
+**NOTE**: This fragment extends `prompter tooling.cli`. All general CLI rules apply.
 
 ## Rust-Specific Requirements
 

@@ -1,23 +1,64 @@
 # Python Documentation
 
-Without further instructions you **MUST NOT** mention dunder methods or attributes in the public documentation.
+## Documentation Philosophy
 
-Non-public methods, attributes, and functions **MUST** have docstrings, but they **MUST NOT** be surfaced in the public API documentation (exclude them from `__all__`, public doc tables, and high-level overviews).
+Since we mandate full type hints, docstrings should focus on **what types cannot express**:
 
-1. All functions, methods, classes, and modules **MUST** have comprehensive documentation in reST/Sphinx format.
+- **WHY** – Rationale, context, design decisions
+- **WHEN** – Preconditions, valid states, timing requirements
+- **WHO** – Intended callers, audience, use cases
 
-   Adhere to reST conventions – we are going to use Sphinx to generate documentation.
+Do **NOT** repeat type information (types are in hints). Do **NOT** explain HOW (code shows implementation).
 
-2. **ALWAYS** adhere to the [pydocstyle](https://www.pydocstyle.org/en/stable/) standards
+## Format
 
-3. Python modules
+Use reST/Sphinx format. Adhere to [pydocstyle](https://www.pydocstyle.org/en/stable/) standards.
 
-   The module **MUST** have a docstring, and the docstring **MUST** enumerate the contents of the module, including all public symbols – (those exposed in the `__all__` variable)
+## Visibility Rules
 
-4. Python functions
+- **MUST NOT** mention dunder methods in public documentation
+- Non-public methods need docstrings but **MUST NOT** appear in public API docs
+- Exclude non-public symbols from `__all__`
 
-   All functions **MUST** have a docstring, and the docstring **MUST** enumerate the arguments and return values, as well as types, and also any exceptions explicitly mentioned in the code;
+## Docstring Requirements
 
-5. Python classes
+### Modules
 
-   The class **MUST** have a docstring, and the docstring **MUST** enumerate the methods and attributes of the class.
+The module **MUST** have a docstring describing:
+- Purpose and responsibility
+- Public symbols (those in `__all__`)
+
+### Functions
+
+Focus on behavior, not types:
+
+```python
+def process_payment(customer: Customer, amount: Money) -> PaymentResult:
+    """Process a payment for a customer.
+
+    Charges the customer's default payment method. If the charge fails,
+    sends a notification email and logs the failure for retry.
+
+    Raises:
+        PaymentDeclined: If the payment provider rejects the charge.
+        CustomerNotFound: If customer has no payment method configured.
+    """
+```
+
+Note: No `:param:` or `:returns:` for types – they're in the signature.
+
+### Classes
+
+Describe purpose and usage patterns:
+
+```python
+class OrderProcessor:
+    """Processes orders through the fulfillment pipeline.
+
+    Use this class when orders need validation, inventory checks,
+    and shipping label generation. For simple refunds, use
+    RefundProcessor instead.
+
+    Thread-safe for concurrent order processing.
+    """
+```

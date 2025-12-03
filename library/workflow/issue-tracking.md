@@ -20,7 +20,7 @@ This file contains:
 
 **If missing**: Prompt user for Asana task and GitHub Project information, then offer to create the file.
 
-See `workflow/work-metadata.md` for complete schema and usage details.
+See `prompter workflow.work-metadata` for complete schema and usage details.
 
 ## Asana Work Queue
 

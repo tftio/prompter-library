@@ -380,7 +380,7 @@ git push
 
 ### Release Flow
 
-See `rust/release-workflow.md` or `tooling/version-management.md` for language-specific release processes.
+See `prompter rust.release-workflow` or `prompter tooling.version-management` for language-specific release processes.
 
 ## Git Anti-Patterns
 

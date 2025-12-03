@@ -1,6 +1,6 @@
 # Agent Metadata Configuration (DEPRECATED)
 
-**This fragment is deprecated.** Use `workflow/work-metadata.md` instead.
+**This fragment is deprecated.** Use `prompter workflow.work-metadata` instead.
 
 ## Migration
 
@@ -13,7 +13,7 @@
 - `tracking.asana_project` (project board) → `work.asana_task` (specific task)
 - `default_tags` → `default_labels`
 
-See `workflow/work-metadata.md` for complete documentation.
+See `prompter workflow.work-metadata` for complete documentation.
 
 ## Legacy Schema (for reference)
 
