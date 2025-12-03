@@ -1,0 +1,128 @@
+# Rust Git Hooks Configuration
+
+## Overview
+
+All Rust projects **MUST** use peter-hook for git hooks with comprehensive quality checks matching CI pipeline.
+
+## Required hooks.toml Configuration
+
+Create `hooks.toml` in project root:
+
+```toml
+# Project hooks configuration
+# Self-contained matching CI pipeline
+
+# =============================================================================
+# CODE QUALITY HOOKS (matches CI lint and format jobs)
+# =============================================================================
+
+[hooks.format-check]
+command = ["cargo", "fmt", "--all", "--", "--check"]
+modifies_repository = false
+execution_type = "other"
+run_always = true
+description = "Check code formatting (matches CI format job)"
+
+[hooks.clippy-check]
+command = ["cargo", "clippy", "--all-targets", "--", "-D", "warnings"]
+modifies_repository = false
+execution_type = "other"
+run_always = true
+description = "Run clippy linting (matches CI lint job)"
+env = { RUSTFLAGS = "-D warnings" }
+
+# =============================================================================
+# TEST HOOKS (matches CI test job)
+# =============================================================================
+
+[hooks.test-all]
+command = ["cargo", "test", "--all", "--verbose"]
+modifies_repository = false
+execution_type = "other"
+run_always = true
+description = "Run all tests (matches CI test job)"
+env = { RUSTFLAGS = "-D warnings" }
+
+[hooks.security-audit]
+command = ["cargo", "audit"]
+modifies_repository = false
+execution_type = "other"
+run_always = true
+description = "Run security audit (matches CI audit job)"
+
+[hooks.secret-scan]
+command = ["gitleaks", "detect", "--source=.", "--verbose", "--no-banner"]
+modifies_repository = false
+execution_type = "other"
+run_always = true
+description = "Scan for secrets and credentials in repository"
+
+[hooks.venv-check]
+command = ["unvenv"]
+modifies_repository = false
+execution_type = "in-place"
+files = ["**/*.py", "**/pyvenv.cfg", "**/activate"]
+description = "Detect uncommitted Python virtual environments"
+
+# =============================================================================
+# VERSION MANAGEMENT HOOKS
+# =============================================================================
+
+[hooks.version-sync-check]
+command = ["versioneer", "verify"]
+include = ["Cargo.toml", "VERSION"]
+modifies_repository = false
+execution_type = "other"
+description = "Verify all version files are synchronized"
+
+[hooks.tag-version-check]
+command = ["sh", "-c", "if git describe --exact-match --tags HEAD 2>/dev/null | grep -q 'projectname-v'; then TAG_VERSION=$(git describe --exact-match --tags HEAD | sed 's/projectname-v//'); CARGO_VERSION=$(versioneer show); if [ \"$TAG_VERSION\" != \"$CARGO_VERSION\" ]; then echo 'ERROR: Git tag version ('$TAG_VERSION') does not match Cargo version ('$CARGO_VERSION')'; echo \"Use 'versioneer tag' to create tags that match the current version\"; exit 1; fi; echo 'Tag version matches Cargo version: '$TAG_VERSION; fi"]
+include = ["Cargo.toml", "VERSION"]
+modifies_repository = false
+execution_type = "other"
+description = "Verify git tag version matches Cargo.toml version"
+
+# =============================================================================
+# HOOK GROUPS
+# =============================================================================
+
+[groups.pre-commit]
+includes = ["format-check", "clippy-check"]
+execution = "sequential"
+description = "Code quality checks before commit (matches CI format + lint jobs)"
+
+[groups.pre-push]
+includes = ["clippy-check", "test-all", "venv-check", "security-audit", "secret-scan", "version-sync-check", "tag-version-check"]
+execution = "sequential"
+description = "Full validation before push (matches CI lint + test + audit + security jobs)"
+```
+
+## Hook Customization for Your Project
+
+### Update Tag Pattern
+Replace `projectname-v` with your actual project tag format:
+
+```toml
+[hooks.tag-version-check]
+command = ["sh", "-c", "if git describe --exact-match --tags HEAD 2>/dev/null | grep -q 'yourproject-v'; then TAG_VERSION=$(git describe --exact-match --tags HEAD | sed 's/yourproject-v//'); CARGO_VERSION=$(versioneer show); if [ \"$TAG_VERSION\" != \"$CARGO_VERSION\" ]; then echo 'ERROR: Git tag version ('$TAG_VERSION') does not match Cargo version ('$CARGO_VERSION')'; exit 1; fi; echo 'Tag version matches Cargo version: '$TAG_VERSION; fi"]
+```
+
+### Optional Hooks
+
+Add these hooks if needed:
+
+```toml
+[hooks.dependency-check]
+command = ["cargo", "deny", "check"]
+modifies_repository = false
+execution_type = "other"
+run_always = true
+description = "Check dependency compliance"
+
+[hooks.unused-deps]
+command = ["cargo", "machete"]
+modifies_repository = false
+execution_type = "other"
+run_always = true
+description = "Check for unused dependencies"
+```
