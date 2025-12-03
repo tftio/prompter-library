@@ -22,3 +22,27 @@
 - `typing.List`, `typing.Dict`, etc. – use native `list`, `dict` directly
 - `Union[A, B]` – use `A | B`
 - `Optional[T]` – use `T | None`
+
+## Type Aliases
+
+**`NewType` for semantic distinction:**
+
+```python
+from typing import NewType
+
+UserId = NewType('UserId', int)
+AccountId = NewType('AccountId', int)
+
+def get_user(user_id: UserId) -> User: ...  # Type checker catches UserId/AccountId mixups
+```
+
+**`TypeAlias` for readability of complex types:**
+
+```python
+from typing import TypeAlias
+
+CoordinateSet: TypeAlias = set[tuple[int, float | None]]
+HandlerMap: TypeAlias = dict[str, Callable[[Request], Response]]
+```
+
+Centralize type aliases in `models/types.py`.
