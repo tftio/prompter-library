@@ -8,7 +8,7 @@
    ```
    These settings stay in place unless the operator explicitly disables them.
 
-2. **Never mask failures** — do not use constructs like `|| true` or `2>/dev/null || true`; they hide real problems.
+2. **Surface all failures** — avoid constructs like `|| true` or `2>/dev/null || true`; they hide real problems.
 
 3. **Handle expected failures explicitly**:
    ```bash
@@ -18,7 +18,7 @@
    ```
    Branching keeps intent clear and preserves exit statuses.
 
-4. **Always use explicit exit codes** — do not rely on the last command's return value:
+4. **Use explicit exit codes** — specify return values explicitly rather than relying on the last command:
    ```bash
    exit 0  # Success
    exit 1  # General error

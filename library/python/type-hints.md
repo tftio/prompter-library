@@ -1,12 +1,12 @@
 # Type Hints
 
-**ALL CODE COMMITTED MUST HAVE TYPE HINTS**. All type hints should be **AS SPECIFIC AS POSSIBLE**, and you should **never** commit `Any` or `object` types without confirming with the operator. In addition, the following rules are **INVARIANT**:
+**All committed code requires type hints.** Type hints must be **as specific as possible**. Confirm with the operator before committing `Any` or `object` types. The following rules are **invariant**:
 
 ## Syntax Rules
 
-1. Optionals of type `T` are **NEVER** written as `Optional[T]` – they **MUST** be written as `T | None`.
-2. Union or sum types **MUST** be written as `A | B`, **NEVER** as `Union[A, B]`.
-3. Use native generic syntax: `list[str]`, `dict[str, int]`, **NEVER** `List[str]` or `Dict[str, int]`.
+1. Write optionals as `T | None` (use modern union syntax, not `Optional[T]`).
+2. Write union types as `A | B` (use modern syntax, not `Union[A, B]`).
+3. Use native generic syntax: `list[str]`, `dict[str, int]` (not `List[str]` or `Dict[str, int]`).
 4. Create type aliases when type declarations get more than two levels deep.
 
 ## Modern Features (Python 3.11+)

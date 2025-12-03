@@ -1,11 +1,12 @@
-# THE FIRST INVARIANT
+# Core Invariants
 
-**YOU MUST NEVER USE WINDOWS LINE ENDINGS**. When generating files, you must **ONLY** use Unix line endings.
+## Line Ending Standard
 
+**Use Unix line endings exclusively (LF).** Windows line endings (CRLF) are prohibited in all generated files.
 
-## SHELL EXECUTION INVARIANT
+## Shell Execution Standard
 
-When executing commands in different directories, **NEVER** use `cd` to change directories. Instead:
+Maintain explicit directory context when executing commands:
 
 1. **Use absolute paths**: `pytest /foo/bar/tests` (not `cd /foo/bar && pytest tests`)
 2. **If `cd` is unavoidable**: Use subshells `(cd /path && command)` to avoid state pollution

@@ -27,4 +27,4 @@ All imports **MUST** be at the top of the file and sorted (standard library → 
 - High concurrency requirements (thousands of concurrent connections)
 - Interfacing with async-only libraries
 
-When using async, document the rationale clearly. Never add async "just in case."
+When using async, document the rationale clearly. Add async only when a specific bottleneck requires it.

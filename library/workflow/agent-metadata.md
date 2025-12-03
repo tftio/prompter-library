@@ -40,7 +40,7 @@ default_tags = ["tag1", "tag2"]
 3. If file doesn't exist, inform operator that metadata file is missing and request all required values
 4. Offer to create `.agent-metadata.toml` in the current working directory with provided values for future workflows
 
-**Never fail silently** - If metadata is required but unavailable, explicitly ask the operator rather than making assumptions or skipping tracking steps.
+**Surface missing metadata explicitly** - If metadata is required but unavailable, ask the operator rather than making assumptions or skipping tracking steps.
 
 ## Example Usage
 

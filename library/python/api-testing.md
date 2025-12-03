@@ -4,7 +4,7 @@
 
 ### Use Real PostgreSQL
 
-**NEVER substitute SQLite for PostgreSQL in tests.** Use testcontainers:
+**Use testcontainers for real PostgreSQL in tests.** SQLite behaves differently:
 
 ```python
 import pytest
@@ -18,9 +18,9 @@ def postgres():
 
 See `prompter engineering.testing-philosophy` for full testing standards.
 
-### No In-Memory Fakes
+### Avoid In-Memory Fakes
 
-**NEVER use in-memory fakes for databases.** They hide:
+**Use real database connections via testcontainers.** In-memory fakes hide:
 - Constraint violations
 - Transaction isolation issues
 - SQL dialect differences

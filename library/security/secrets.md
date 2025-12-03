@@ -2,7 +2,7 @@
 
 ## Core Principle
 
-**Secrets are NEVER committed to version control.** This is non-negotiable.
+**Store secrets outside version control.** This is non-negotiable.
 
 ## Environment Separation
 
@@ -19,7 +19,7 @@
 Create `.env` in project root (must be in `.gitignore`):
 
 ```bash
-# .env - NEVER COMMIT THIS FILE
+# .env - Keep out of version control
 DATABASE_URL=postgresql://localhost/myapp_dev
 API_SECRET_KEY=dev-only-secret-key
 STRIPE_SECRET_KEY=sk_test_xxx
@@ -68,7 +68,7 @@ database_url = get_secret("/myapp/prod/database_url")
 
 ### Naming Convention
 
-```
+```text
 /{app}/{environment}/{secret_name}
 
 /myapp/prod/database_url
@@ -105,7 +105,7 @@ Service roles should have minimal SSM access:
 ## Audit Logging
 
 - Log all secret access (who, when, which secret)
-- Never log secret values
+- Redact secret values from all log output
 - Alert on unusual access patterns
 
 ```python
@@ -118,11 +118,11 @@ def get_secret(name: str, requester: str) -> str:
     # ... fetch secret
 ```
 
-## What NOT to Do
+## Secret Handling Rules
 
-- **Never** commit secrets to git (even in private repos)
-- **Never** log secret values
-- **Never** include secrets in error messages
-- **Never** store secrets in code comments
-- **Never** use the same secrets across environments
-- **Never** share secrets via Slack, email, or other unencrypted channels
+- **Store secrets in .env (local) or SSM (production)** – Git history is permanent and searchable.
+- **Redact secrets from log output** – Logs are often aggregated and retained.
+- **Use generic error messages for auth failures** – Specific messages leak implementation details.
+- **Document secret locations in README, not code** – Comments are searchable in source.
+- **Generate unique secrets per environment** – Shared secrets spread blast radius.
+- **Share secrets via 1Password or SSM** – Unencrypted channels are logged and archived.

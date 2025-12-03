@@ -1,8 +1,8 @@
 # Python Linting
 
-- **MUST** run the approved lint tools and resolve every reported error before committing; if you are blocked, ask the operator for guidance instead of shipping a warning.
-- **MUST NOT** add blanket ignore directives or skip lint errors without explicit operator approval.
-- **MUST** treat every lint issue as blocking unless the operator designates a specific exception.
+- **Run approved lint tools and resolve all errors before committing** – ask the operator for guidance if blocked.
+- **Request operator approval for ignore directives** – blanket ignores require explicit approval.
+- **Treat every lint issue as blocking** unless the operator designates a specific exception.
 
 ## Ignore Directives
 

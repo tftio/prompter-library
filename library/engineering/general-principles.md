@@ -2,10 +2,10 @@
 
 ## Core Rules
 
-1. **NEVER suppress errors** – fail fast so problems surface immediately instead of silently succeeding.
-2. **NEVER HARDCODE VALUES** even if it simplifies a change; inject or configure everything.
-3. **ASK THE OPERATOR when you are stuck** – do not apply ad-hoc fixes if you do not understand the issue.
-4. **DO NOT USE MOCKS when writing tests** except at system boundaries; see `prompter engineering.testing-philosophy`.
+1. **Surface all errors immediately** (fail-fast pattern) – Problems reveal themselves at the source.
+2. **Inject or configure all values** – Hardcoded values create hidden dependencies.
+3. **Ask the operator when stuck** – Ad-hoc fixes obscure root causes.
+4. **Test against real systems** except at system boundaries – Mocks hide consistency issues. See `prompter engineering.testing-philosophy`.
 
 For default platforms and toolchain requirements, follow the `environment` fragments.
 
@@ -30,7 +30,7 @@ Impossible states that indicate bugs in the program:
 - Invalid state after a sequence that should guarantee validity
 - Broken assumptions about data relationships
 
-These **MUST crash immediately** with diagnostics. Never attempt recovery from an invariant violation – the program state is corrupted.
+These **MUST crash immediately** with diagnostics. Recovery from an invariant violation is impossible – the program state is corrupted.
 
 ### Assertions for Invariants
 
@@ -47,7 +47,7 @@ assert balance >= 0, f"Invariant violated: balance cannot be negative, got {bala
 
 ### Wrap Dependencies
 
-Don't expose dependency APIs directly. Wrap them in domain-specific interfaces:
+Wrap dependency APIs in domain-specific interfaces:
 
 ```python
 # BAD - Exposing stripe directly

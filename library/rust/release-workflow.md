@@ -167,11 +167,11 @@ just release major
 
 ## Version Management Rules
 
-### Critical Rules (NEVER VIOLATE)
-1. **Never manually edit Cargo.toml version** - Use versioneer
-2. **Never create git tags manually** - Use versioneer tag or release script
-3. **Always use automated release workflow** - Prevents version/tag mismatches
-4. **Always run quality gates before version bump** - Ensures release quality
+### Critical Rules
+1. **Use versioneer for Cargo.toml version** - Ensures atomic updates
+2. **Use versioneer tag or release script for git tags** - Ensures consistency
+3. **Use automated release workflow** - Prevents version/tag mismatches
+4. **Run quality gates before version bump** - Ensures release quality
 
 ### Version Synchronization
 - VERSION file is single source of truth
@@ -238,7 +238,7 @@ When tag is pushed, GitHub Actions:
 ## Tag Format Pattern
 
 ### Standard Format
-```
+```text
 {project-name}-v{version}
 ```
 

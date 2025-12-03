@@ -128,7 +128,7 @@ Blocked by: #98
 ### PR Creation
 
 1. **Reference GitHub issue** in PR title and description:
-   ```
+   ```text
    Title: Fix authentication token expiry (#103)
 
    Description:
@@ -184,13 +184,13 @@ When PR merges:
 ## Multi-Checkpoint Asana Updates
 
 ### Checkpoint 1: Work Start
-```
+```text
 Status: Not Started → In Progress
 Comment: Breaking this into GitHub issues for implementation tracking.
 ```
 
 ### Checkpoint 2: Issues Created
-```
+```text
 Comment: Created engineering tasks:
 - Authentication schema design: https://github.com/org/repo/issues/101
 - JWT implementation: https://github.com/org/repo/issues/102
@@ -201,7 +201,7 @@ Comment: Created engineering tasks:
 ```
 
 ### Checkpoint 3: PRs Opened
-```
+```text
 Comment: Implementation PRs:
 - https://github.com/org/repo/pull/234 (schema + JWT)
 - https://github.com/org/repo/pull/235 (middleware + endpoints)
@@ -209,7 +209,7 @@ Comment: Implementation PRs:
 ```
 
 ### Checkpoint 4: Work Complete
-```
+```text
 Status: In Progress → Complete
 Comment: Completed. All PRs merged, authentication fully implemented.
 
@@ -249,47 +249,49 @@ Delivered in PRs: #234, #235, #236
 - **Traceability** - Clear links between product requirements and implementation
 - **Accountability** - Engineers demonstrate systematic approach to work
 
-## Anti-Patterns
+## Best Practices
 
-### DON'T: Clutter Asana with Implementation Details
-```
-❌ Bad Asana comment:
-"Fixed bug in token validation logic where expired tokens weren't
-being rejected due to timezone offset calculation error in jwt.py:142"
+### Keep Asana High-Level
+```text
+Good Asana comment:
+"Engineering breakdown complete. GitHub issues #101-106 created for implementation tracking."
+
+Implementation details belong in GitHub issues; Asana stays product-focused.
 ```
 
-Implementation details belong in GitHub issues, not Asana.
-
-### DON'T: Skimp on GitHub Issue Context
-```
-❌ Bad GitHub issue:
-Title: Fix auth bug
-Description: The auth thing isn't working, need to fix it.
+### Provide Full GitHub Issue Context
+```text
+Good GitHub issue:
+Title: Fix JWT token expiry validation (#103)
+Description: Tokens with timezone-offset expiry are incorrectly accepted.
+Expected: 401 for expired tokens. Actual: 200 accepted.
+Verify: Run auth_test.py::test_expired_token_rejection
 ```
 
 Issues must have full context - what's broken, why it matters, how to verify the fix.
 
-### DON'T: Let Issues Go Stale
-```
-❌ Bad practice:
-Open issue for 2 weeks, then close with "Done" and no other context.
+### Keep Issues Current
+```text
+Good practice:
+Update issues as you work with design decisions and implementation notes.
+Close with resolution summary and links to PRs.
 ```
 
-Update issues as you work. Future readers need to understand what happened.
+Future readers need to understand what happened.
 
-### DON'T: Create One-to-One Asana/GitHub Mapping
-```
-❌ Bad breakdown:
+### Break Down Work into Discrete Tasks
+```text
+Good breakdown:
 Asana: "Add authentication"
-GitHub: "Add authentication" (single issue)
+GitHub: 6 issues - schema design, JWT implementation, middleware, endpoints, tests, docs
 ```
 
-Break down into discrete tasks. Monolithic issues are hard to track and review.
+Discrete tasks are easier to track and review.
 
 ## Examples
 
 ### Good Asana Task
-```
+```text
 Title: Add user authentication to API
 Description: Users need secure authentication to access protected endpoints.
 
@@ -304,7 +306,7 @@ Comments:
 ```
 
 ### Good GitHub Issue
-```
+```markdown
 Title: Implement JWT token generation and validation (#102)
 
 ## Context

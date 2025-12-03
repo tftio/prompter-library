@@ -2,10 +2,10 @@
 
 ## SQL Injection Prevention
 
-**Always use SQLAlchemy query language. Never use raw SQL strings.**
+**Use SQLAlchemy query language exclusively.** Raw SQL strings are prohibited.
 
 ```python
-# BAD - Raw SQL string (NEVER DO THIS)
+# BAD - Raw SQL string (vulnerable to injection)
 query = f"SELECT * FROM users WHERE id = '{user_id}'"
 
 # BAD - Even text() with parameters is discouraged

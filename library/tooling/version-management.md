@@ -1,14 +1,14 @@
 # Version Management
 
-## CRITICAL VERSION SYNCHRONIZATION RULES
+## Version Synchronization Rules
 
-**INVARIANT – NEVER VIOLATE THESE:**
+**These rules are invariant:**
 
-1. **Keep VERSION and the project manifest in sync** – `VERSION` and `pyproject.toml`/`Cargo.toml` MUST match exactly.
-2. **Never touch one without the other** – Any version bump requires updating every file that stores the version string.
-3. **Enforce SEMVER format** – Always use `MAJOR.MINOR.PATCH` (e.g., `0.0.2`).
-4. **Protect downstream automation** – Infra tagging and release tooling read `VERSION`; package managers read the manifest. Drift breaks deployments.
-5. **Use `versioneer` for all bumps** – Manual edits invite mistakes; the tool updates files atomically and can tag releases.
+1. **Keep VERSION and the project manifest in sync** – `VERSION` and `pyproject.toml`/`Cargo.toml` must match exactly.
+2. **Update all version files together** – Any version bump requires updating every file that stores the version string.
+3. **Use SEMVER format** – Always use `MAJOR.MINOR.PATCH` (e.g., `0.0.2`).
+4. **Protect downstream automation** – Infra tagging reads `VERSION`; package managers read the manifest. Drift breaks deployments.
+5. **Use versioneer for all bumps** – The tool updates files atomically and can tag releases.
 
 ## Versioneer Usage
 
@@ -131,12 +131,12 @@ Release workflows **MUST** validate version consistency:
 
 ### Rust Version Management Rules
 
-1. **NEVER manually edit Cargo.toml version** - Use versioneer only
-2. **NEVER manually edit VERSION file** - Use versioneer only
-3. **NEVER create git tags manually** - Use versioneer tag or just release
-4. **ALWAYS use just release** - Ensures quality gates and atomic updates
-5. **ALWAYS verify synchronization** - Run versioneer verify before commits
-6. **ALWAYS use project-specific tag format** - Match your project name in tags
+1. **Use versioneer exclusively for Cargo.toml versions** – Manual edits create sync failures.
+2. **Use versioneer exclusively for VERSION files** – Direct edits bypass validation.
+3. **Use versioneer tag or just release for git tags** – Manual tags lack metadata.
+4. **Use just release for releases** – Ensures quality gates and atomic updates.
+5. **Verify synchronization before commits** – Run `versioneer verify` as part of workflow.
+6. **Use project-specific tag format** – Match your project name in tags.
 
 ### Multi-Layer Validation
 

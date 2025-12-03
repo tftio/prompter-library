@@ -63,4 +63,4 @@ def main(
   - WARNING: Unexpected but handled conditions
   - INFO: Significant state changes, request completion
   - DEBUG: Detailed diagnostic information
-- **Never log secrets, passwords, or PII**
+- **Redact secrets, passwords, and PII from all log output**

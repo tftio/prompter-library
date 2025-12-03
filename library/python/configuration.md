@@ -18,7 +18,7 @@
 
 ## File Structure
 
-```
+```text
 project/
   config/
     default.toml      # Base configuration

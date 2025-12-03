@@ -4,7 +4,7 @@
 
 All Python projects **MUST** use the `src/` layout with tests parallel:
 
-```
+```text
 project/
   src/
     myapp/
@@ -89,7 +89,7 @@ def get_git_status(repo_path: Path) -> GitStatus | GitError:
     return _parse_git_status(result.stdout)
 ```
 
-**Never pass raw subprocess output through the system.** Parse it into typed containers immediately.
+Parse subprocess output into typed containers immediately at the call site.
 
 ## File Organization
 
@@ -113,7 +113,7 @@ This allows internal restructuring without breaking importers.
 
 **4 levels is the refactoring threshold.**
 
-```
+```text
 myapp.services.billing.stripe.webhooks  # Too deep - refactor
 myapp.services.billing.webhooks         # Better
 ```

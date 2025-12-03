@@ -1,15 +1,12 @@
-# 🚨 CRITICAL JUSTFILE RULES 🚨
+# Justfile Rules
 
-**INVARIANT JUSTFILE RULES - NEVER VIOLATE THESE:**
+**Invariant rules for justfile targets:**
 
-- **NEVER use heredocs** in justfile targets to create inline scripts
-- **NEVER use `python -c`** inline code in justfile targets
-- **NEVER create and execute scripts** within justfile targets
-- **IF you need shell logic** - create separate shell scripts in `scripts/`
-- **Keep justfile targets simple** - they should call external scripts/functions
-- **DEPENDENCY-ONLY RECIPES** that are used exclusively as dependencies by other recipes MUST:
-   - Be prefixed with `_` in their name to indicate they are internal/dependency-only
-   - Be placed in a group called `dependent_only`
-   - Examples: `_get-env-config`, `_get-tenant-config`
+- **Write shell scripts as separate files** – Heredocs in justfiles create maintenance burden.
+- **Call Python modules, not inline code** – `python -c` hides logic and breaks linting.
+- **Reference external scripts from targets** – Inline script generation bypasses version control.
+- **Keep justfile targets simple** – Targets should call external scripts/functions.
+- **Prefix internal recipes with `_`** – Recipes used only as dependencies belong in `dependent_only` group.
+  - Examples: `_get-env-config`, `_get-tenant-config`
 
-These rules are **INVARIANT** and **NON-NEGOTIABLE**. Any violation is unacceptable.
+**These rules take primacy over convenience.**

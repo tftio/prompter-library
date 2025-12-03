@@ -239,7 +239,7 @@ fn test_cross_platform() {
 ## Test Organization
 
 ### Directory Structure
-```
+```text
 project/
 ├── src/
 │   ├── main.rs      # Contains #[cfg(test)] unit tests

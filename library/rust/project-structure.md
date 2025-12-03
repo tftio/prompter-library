@@ -19,7 +19,7 @@ All Rust projects **MUST** include these files:
 - **justfile** - Development workflow automation
 
 ### Directory Structure
-```
+```text
 project/
 ├── src/
 │   ├── main.rs           # Binary entry point
@@ -113,10 +113,10 @@ use_try_shorthand = true
 
 ## Standards Enforcement
 
-1. **Never manually edit Cargo.toml version** - Use versioneer for atomic updates
-2. **Always synchronize VERSION and Cargo.toml** - Enforced by git hooks and CI
+1. **Use versioneer for Cargo.toml version** - Ensures atomic updates and synchronization
+2. **Synchronize VERSION and Cargo.toml** - Enforced by git hooks and CI
 3. **Require nightly for formatting** - rustfmt needs nightly for full feature set
 4. **Use edition 2024** - Latest stable edition for modern patterns
 5. **Set MSRV to 1.85.0** - Current stable with required features
-6. **Single binary per project** - Do not split into multiple executables
-7. **TOML for all configuration** - No JSON, YAML, or custom formats
+6. **Single binary per project** - Keep functionality in one executable
+7. **TOML for all configuration** - Standard format across the ecosystem

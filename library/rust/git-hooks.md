@@ -230,7 +230,7 @@ pre-push:
 ## Hook Execution Flow
 
 ### On Commit
-```
+```text
 1. format-check runs (cargo fmt --check)
    ↓ success
 2. clippy-check runs (cargo clippy)
@@ -239,7 +239,7 @@ pre-push:
 ```
 
 ### On Push
-```
+```text
 1. clippy-check runs
    ↓ success
 2. test-all runs

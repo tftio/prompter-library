@@ -93,13 +93,13 @@ def upgrade():
     op.drop_column('users', 'last_name')
 ```
 
-**Never** split schema and data changes across multiple migrations for the same logical change.
+Keep schema and data changes together in one migration for each logical change.
 
 ## Migration Naming
 
 Use descriptive names with timestamps:
 
-```
+```text
 2025_01_15_1423_add_user_email_verification.py
 2025_01_16_0930_migrate_legacy_permissions.py
 ```

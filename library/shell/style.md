@@ -34,7 +34,8 @@
 - **Complex logic** - Conditionals, loops over data structures, error handling
 - **Scripts over 100 lines** - Complexity threshold
 
-### Never Do This:
-Chain Python scripts via subprocess. This gives you the worst of both worlds: shell's lack of testability combined with Python's clunky pipeline creation.
+### Avoid Subprocess Chaining
 
-Instead: Put logic in library code, create thin Typer CLI wrappers. See `prompter python.project-structure`.
+Chaining Python scripts via subprocess combines shell's lack of testability with Python's clunky pipeline creation.
+
+**Better approach**: Put logic in library code, create thin Typer CLI wrappers. See `prompter python.project-structure`.

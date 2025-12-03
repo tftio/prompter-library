@@ -1,4 +1,4 @@
-# CLI RULES
+# CLI Standards
 
 When writing CLI tools, you **MUST** adhere to the following standards:
 

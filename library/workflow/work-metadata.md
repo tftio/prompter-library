@@ -104,7 +104,7 @@ work-start \
 - Parse URLs to extract IDs for API calls
 - Update Asana tasks and GitHub issues automatically
 
-**Never manually edit** - Tools/agents maintain this file
+**Use tools exclusively** - Tools/agents maintain this file
 
 ### Deletion
 
@@ -123,7 +123,7 @@ Each worktree represents discrete work:
 
 ### Example Structure
 
-```
+```text
 ~/Projects/my-api/                    # Main repository
 ├── main/                             # Main branch worktree
 │   └── .work-metadata.toml           # (optional, for main branch work)
@@ -289,13 +289,13 @@ def parse_github_project_url(url: str) -> tuple[str, str, int]:
 
 1. **Read metadata** before any Asana/GitHub operations
 2. **Use URLs/IDs** to make correct API calls
-3. **Never hardcode** Asana tasks or GitHub projects
+3. **Read from metadata** for Asana tasks and GitHub projects
 4. **Log operations** that use metadata for debugging
 
 ### Error Handling
 
 **Missing file**:
-```
+```text
 Error: No .work-metadata.toml found in current directory.
 
 This file links worktree to work tracking systems.
@@ -307,7 +307,7 @@ Or create manually following the schema in workflow/work-metadata.md
 ```
 
 **Invalid format**:
-```
+```text
 Error: .work-metadata.toml is malformed.
 
 Missing required field: work.asana_task
@@ -319,7 +319,7 @@ github_project = "https://github.com/orgs/org/projects/42"
 ```
 
 **Invalid URLs**:
-```
+```text
 Error: Could not parse Asana task URL from .work-metadata.toml
 
 Got: "invalid-url"
@@ -418,39 +418,40 @@ default_labels = ["tag1", "tag2"]
 - `tracking.asana_project`: Asana project board → `work.asana_task`: Specific task
 - `default_tags` → `default_labels` (consistent with GitHub terminology)
 
-## Anti-Patterns
+## Best Practices
 
-### DON'T: Commit .work-metadata.toml
-```
-❌ git add .work-metadata.toml
+### Keep .work-metadata.toml Out of Version Control
+```text
+# .gitignore
+.work-metadata.toml
 
 This file is worktree-specific, not repository-wide.
-Add to .gitignore instead.
 ```
 
-### DON'T: Manually Edit (If Using Automated Tools)
-```
-❌ vim .work-metadata.toml
+### Use Tools for Updates (When Using Automated Tracking)
+```text
+# Let work-start and tracking agents maintain this file
+work-start --asana <task> --github-project <number>
 
-If using automated work tracking tools, let them maintain this file.
-Manual edits may be overwritten or cause inconsistencies.
-```
-
-### DON'T: Reuse Across Worktrees
-```
-❌ cp ../other-worktree/.work-metadata.toml .
-
-Each worktree tracks different work. Create fresh metadata per worktree.
+Automated tools keep the file consistent.
 ```
 
-### DON'T: Use Generic Values
+### Create Fresh Metadata Per Worktree
+```text
+# Each worktree tracks different work
+work-start --asana <task> --github-project <number>
+
+Different work contexts require separate metadata.
 ```
-❌ Bad:
+
+### Use Real Values
+```text
+# Always use actual URLs/IDs
 [work]
-asana_task = "TBD"
-github_project = "TODO"
+asana_task = "https://app.asana.com/0/123/456"  # Real task
+github_project = 15                               # Real project
 
-Metadata must contain real, valid URLs/IDs.
+Metadata must contain valid, resolvable references.
 ```
 
 ## .gitignore Configuration

@@ -8,7 +8,7 @@ Since we mandate full type hints, docstrings should focus on **what types cannot
 - **WHEN** – Preconditions, valid states, timing requirements
 - **WHO** – Intended callers, audience, use cases
 
-Do **NOT** repeat type information (types are in hints). Do **NOT** explain HOW (code shows implementation).
+Type information belongs in hints, not docstrings. Implementation details belong in code, not documentation.
 
 ## Format
 
@@ -16,8 +16,8 @@ Use reST/Sphinx format. Adhere to [pydocstyle](https://www.pydocstyle.org/en/sta
 
 ## Visibility Rules
 
-- **MUST NOT** mention dunder methods in public documentation
-- Non-public methods need docstrings but **MUST NOT** appear in public API docs
+- **Exclude dunder methods from public documentation**
+- **Keep non-public methods out of public API docs** – they still need docstrings
 - Exclude non-public symbols from `__all__`
 
 ## Docstring Requirements

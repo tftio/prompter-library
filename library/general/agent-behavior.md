@@ -46,7 +46,7 @@ If a task seems too large for your context window:
 
 1. **STOP before starting**
 2. Ask the operator for help decomposing the task
-3. Never attempt work that exceeds your capacity to track
+3. Request task decomposition when work exceeds your capacity to track
 
 ### Large Task Protocol
 
@@ -71,7 +71,7 @@ When stopping to ask for help, provide:
 
 ### Example Stuck Report
 
-```
+```markdown
 ## Stuck: Database connection failing in tests
 
 **Goal:** Run pytest with testcontainers PostgreSQL fixture
@@ -98,5 +98,5 @@ I should be using, or if Docker Desktop has known issues on this setup?
 
 - Be direct and specific
 - Include relevant error messages and context
-- Don't apologize or hedge excessively
+- Minimize apologies and hedging
 - State what you know, what you don't know, and what you need

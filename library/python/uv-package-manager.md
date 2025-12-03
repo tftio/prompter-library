@@ -1,8 +1,8 @@
 # uv Package Manager
 
-**ALL** Python projects will be managed with [uv](https://docs.astral.sh/uv). You are **NOT** to **EVER** use **ANY** other tools for managing Python, such as `pip` or `setuptools` or `poetry` or `pdm`. `uv` is the **ONLY** tool. You **MUST NOT** use the `uv pip` subcommand **UNLESS** it is *explicitly* required.
+**Use [uv](https://docs.astral.sh/uv) exclusively for Python package management.** Legacy tools (pip, setuptools, poetry, pdm) are superseded. Use `uv pip` subcommand only when explicitly required.
 
-**ALL** invocations of Python, or of Python tools, **MUST** be via `uv`; either as `uv run` or `uvx`.
+**Invoke Python via uv**: Use `uv run` or `uvx` for all Python and Python tool invocations.
 
 ## Key Commands
 
@@ -51,6 +51,6 @@ dev-dependencies = [
 
 ## Lockfile Management
 
-- `uv.lock` is human-readable TOML but **MUST NOT** be manually edited
+- `uv.lock` is human-readable TOML – edit only via uv commands
 - **Always commit `uv.lock`** to version control for reproducible builds
 - `uv run` automatically verifies lockfile is up-to-date before execution

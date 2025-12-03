@@ -10,7 +10,7 @@ The goal of testing is to verify your code works correctly against the actual sy
 
 ### PostgreSQL: Testcontainers Always
 
-**NEVER substitute SQLite for PostgreSQL in tests.** They have different behavior:
+**Use real PostgreSQL via testcontainers.** SQLite behaves differently:
 - Different SQL syntax
 - Different constraint handling
 - Different transaction semantics
@@ -35,7 +35,7 @@ def db_session(postgres):
         session.rollback()
 ```
 
-### No In-Memory Fakes
+### Avoid In-Memory Fakes
 
 In-memory database fakes hide:
 - Constraint violations
@@ -122,7 +122,7 @@ def test_invalid_email():
 
 ## Test Organization
 
-```
+```text
 tests/
   conftest.py           # Shared fixtures (postgres, etc.)
   test_models/
