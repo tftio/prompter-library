@@ -20,6 +20,6 @@
 | `shellcheck` | Shell script linting |
 | `shfmt` | Shell script formatting |
 | `ruff` | Python linting and formatting |
-| `mypy` | Python type checking (production) |
+| `basedpyright` | Python type checking (production) |
 | `ty` | Python type checking (experimental, Astral) |
 | `interrogate` | Python docstring coverage |

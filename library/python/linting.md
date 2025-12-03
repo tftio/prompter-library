@@ -50,9 +50,42 @@ docstring-code-format = true
 
 **Run order**: `ruff check --fix . && ruff format .` (linter before formatter for import sorting)
 
+## Ruff Linting Philosophy
+
+**Trust ruff by default.** Ruff rules exist to catch bugs and enforce consistency.
+
+### Configuration Hierarchy
+
+1. **Global ignores** (`[tool.ruff.lint] ignore`) - ONLY for purely stylistic rules that are never bugs:
+   - Docstring formatting (D100-D107, D417)
+   - Framework-required patterns (Typer: B008, FBT001-003)
+   - TODO comment formatting (TD002, TD003, FIX002)
+   - Complexity thresholds (configured separately)
+   - Unused arguments in callbacks (ARG001-004)
+
+2. **Per-file-ignores** - ONLY for directories with fundamentally different purposes:
+   - `tests/**/*.py` - Test code has different requirements
+   - `scripts/**/*.py` - Dev tooling, not production code
+   - `build/**/*.py` - Build hooks, not library code
+   - `db/alembic/**/*.py` - Auto-generated migrations
+
+3. **Inline `# noqa:`** - For specific exceptions in library code:
+   - MUST include the specific rule code: `# noqa: S311`
+   - MUST include explanation: `# noqa: S311 - random used for test data shuffling, not crypto`
+   - Placed at the exact line where the exception occurs
+
+### Library Code Standard
+
+All code under `src/` MUST be ruff-clean. Exceptions are:
+- Documented at the callsite with `# noqa: CODE - reason`
+- Reviewed and justified
+- As narrow as possible (single line, specific rule)
+
+**Never add src/ paths to per-file-ignores.** If a pattern is legitimately needed throughout a module, fix the code or add targeted noqa comments that document the reasoning.
+
 ## ty (Type Checker)
 
-[ty](https://docs.astral.sh/ty/) is Astral's type checker written in Rust. As of December 2025, ty is pre-alpha (v0.0.x); use **mypy** for production type checking until ty reaches beta (expected late 2025).
+[ty](https://docs.astral.sh/ty/) is Astral's type checker written in Rust. As of December 2025, ty is pre-alpha (v0.0.x); use **basedpyright** for production type checking until ty reaches beta (expected late 2025).
 
 **Quick check**: `uvx ty check`
 
